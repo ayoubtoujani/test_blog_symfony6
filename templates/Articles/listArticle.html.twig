@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+     Bloggy | Articles
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+   <style>
+        .article-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+          
+        }
+
+        .article-item {
+            flex-basis: calc(33.33% - 20px); 
+            margin-bottom: 40px;
+            margin-right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 15px; 
+            background-color: #719bf0; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            position: relative;
+            height: 300px;
+            width: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .article-item:hover {
+            box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+            transform: translateY(1px) scale(1.04);
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: white; 
+            background-color: #001842; 
+            margin-bottom: 5px;
+            padding: 10px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            text-align: center;
+        }
+
+        .article-content {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 10px;
+            flex-grow: 1; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4; 
+            -webkit-box-orient: vertical;
+        }
+
+        .article-date {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 10px;
+        }
+
+        .profile-image {
+            width: 55px;
+            height: 55px;
+            margin-left: 10px;
+            border-radius: 50%;
+        }
+
+        .username-label a {
+            font-weight: bold;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        h1 {
+            color: #4848ed;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 50px;
+        }
+
+        .content {
+            width: 100%;
+            float: right;
+        }
+
+        .text {
+            height: 100%;
+            width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(26, 26, 26);
+            z-index: 1;
+            transition-duration: .3s;
+            font-size: 1.04em;
+            font-weight: 600;
+        }
+
+        body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+   <div class="article-container">
+    {% for article in articles %}
+        <div class="article-item">
+            <div>
+                <p class="article-title">{{ article.getTitre() }}</p>
+                <p class="article-content">{{ article.getContenu() }}</p>
+            </div>
+            <div style="display: flex; align-items: center; margin: 10px;">
+                <img class="profile-image" src="{{ asset('images/profile.jpg') }}">
+                <div style="margin-left: 10px;">
+                    <p class="username-label">
+                        <a href="#">{{ article.getAuteur().getFirstname() }} {{ article.getAuteur().getLastname() }}</a>
+                    </p>
+                    <p class="article-date">{{ article.getDateCreation()|date('Y-m-d H:i:s') }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if articles is empty %}
+        <h1> Sorry, No Articles Found </h1>
+        <img src="https://cdn-icons-png.flaticon.com/512/4943/4943620.png" alt="article Not Found" style="border-radius: 10px; width: 98%">
+    {% endif %}
+</div>
+{% endblock %}

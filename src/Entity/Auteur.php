@@ -13,9 +13,6 @@ class Auteur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idA = null;
-
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
@@ -33,14 +30,9 @@ class Auteur
         return $this->id;
     }
 
-    public function getIdA(): ?int
+    public function setId(int $id): static
     {
-        return $this->idA;
-    }
-
-    public function setIdA(int $idA): static
-    {
-        $this->idA = $idA;
+        $this->id = $id;
 
         return $this;
     }
