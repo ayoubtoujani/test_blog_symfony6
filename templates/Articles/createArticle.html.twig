@@ -42,41 +42,28 @@
         margin-top: 10px;
         margin-left: 20px;
         width: 550px;
-        height: 50px; /* Ajustez la hauteur selon vos besoins */
-        resize: vertical; /* Permet le redimensionnement vertical uniquement */
+        height: 50px; 
+        resize: vertical; 
     }
-    .error-field .text-field{
-        border-color: red;
-    }
-    
-    .error-field .text-area{
-        border-color: red;
-    }
-
-      .error-field .cadre-image {
-        border-color: red;
-    }
-
-
-
-    .error-message {
-        color: red;
-        font-size:14px;
-    }
+    .error {
+            color: red;
+            font-size: 14px;
+        }
 </style> 
 {% endblock %}
 {% block content %}
 <h1 style="text-align: center; margin-top: 20px; color: #3642dd; padding-top:10px"> Create Article</h1>
-<form method="post" action="{{ path('create_article') }}"  novalidate>
+<form style="margin-top: 20px; margin-left: 20px; text-align: center;"method="post" action="{{ path('create_article') }}"  novalidate>
                 {{ form_start(form) }}
                 
                 <div>
                     {{ form_label(form.Titre) }}
                     {{ form_widget(form.Titre, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;  width: 300px; height: 40px;'}}) }}
+                 
                  <div class="error">
-                    {{ form_errors(form.Titre, {'attr': {'class': 'error-message'}}) }}
+                    {{ form_errors(form.Titre, {'attr': {'class': 'error'}}) }}
                     </div>
-                </div>
+                 </div>
 
                 <div>
                     {{ form_label(form.Contenu) }}
@@ -84,12 +71,14 @@
                     <div class="error">
                     {{ form_errors(form.Contenu, {'attr': {'class': 'error'}}) }}
                     </div>
-                </div>
+                </div>            
                 
-                 <div class="boutons-container" style="display: flex; margin-top: 20px;">
-        <button type="submit" class="bouton-add" >Ajouter</button>
-        <button id="btnAnnuler" class="bouton-add" style="margin-left: 50px; type="button" onclick= "window.location.href={{ path('articles') }}">Annuler</button>
-    </div>         
+                <div class="boutons-container" style="display: flex; margin-top: 20px; text-align: center; margin-left: 180px;">
+                    <button type="submit" class="bouton-add">Ajouter</button>
+                    <button id="btnAnnuler" class="bouton-add" style="margin-left: 50px;" type="button" onclick="window.location.href='{{ path('articles') }}'">Annuler</button>
+                </div>        
+                
                 {{ form_end(form) }}
-            </form>
+</form>
+
 {% endblock %}

@@ -296,7 +296,7 @@ main .container .left .profile {
             <div class="create">
                 
                 <div class="profile-photo">
-                      <img src="{{ asset('images/profile.jpg' ) }}" style="width: 50px; height: 50px; " alt="">
+                      <img src="{{ asset('images/profile.png' ) }}" style="width: 50px; height: 50px; " alt="">
                 </div>
             <a href="{{ path('app_login') }}" class="btn btn-primary">Log Out</a>
   
@@ -313,7 +313,7 @@ main .container .left .profile {
             <div class="left">
                 <a class="profile">
                     <div class="profile-photo">
-                      <img src="{{ asset('images/profile.jpg' ) }}" style="width: 30px; height: 30px;" alt="">
+                      <img src="{{ asset('images/profile.png' ) }}" style="width: 30px; height: 30px;" alt="">
 
                     </div>
                    {% if user is not null %}
@@ -328,10 +328,9 @@ main .container .left .profile {
                 <a class="menu-item " id="home" href='{{ path("articles") }}'>
                         <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
                     </a>
-                    <a class="menu-item " href="#" id="profile">
+                    <a class="menu-item " id="profile" href='{{ path("my_articles") }}'>
                     <span><i class="fa-solid fa-user"></i></span><h3>My Articles</h3>
                     </a>
-                   
                 </div>
                 <!.................END OF SIDEBAR............>
              {% block create  %}  

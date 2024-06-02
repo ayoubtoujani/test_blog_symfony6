@@ -13,6 +13,9 @@ use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\ArticleFormType;
+use App\Form\UpdateArticleFormType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 
 class MainController extends AbstractController
@@ -59,7 +62,6 @@ class MainController extends AbstractController
 
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             $user = $registerForm->getData();
-            // Additional validation or processing if needed before persisting
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -67,7 +69,7 @@ class MainController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('articles');
+            return $this->redirectToRoute('app_login');
         }
         
         return $this->render('login/login.html.twig', [
@@ -102,7 +104,7 @@ class MainController extends AbstractController
         }
 
         $article = new Article();
-        $form = $this->createForm(ArticleFormType::class, $article);
+        $form = $this->createForm(ArticleFormType::class, $article, ['validation_groups' => ['create']]);
 
         $form->handleRequest($request);
 
@@ -123,4 +125,94 @@ class MainController extends AbstractController
             'user' => $user
         ]);
     }
+
+    //geta ll articles by user
+
+    #[Route('/my', name: 'my_articles', methods: ['GET', 'POST'])]
+    public function myarticles(SessionInterface $session): Response
+    {
+        $user = $session->get('user');
+        // Check if a user is logged in
+        if ($user instanceof Auteur) {
+            // Fetch publications by their owner
+            $articles = $this->doctrine->getRepository(Article::class)->findBy(['Auteur' => $user->getId()]);
+            return $this->render('Articles/myArticles.html.twig', [
+                'articles' => $articles,
+                'user' => $user,   
+            ]);
+        }
+}
+
+#[Route('/delete-article/{id}', name: 'delete_article', methods: ['GET', 'POST'])]
+public function deletePublication($id,SessionInterface $session): RedirectResponse
+{
+    $article = $this->doctrine->getRepository(Article::class)->find($id);
+    if (!$article) {
+        return $this->redirectToRoute('my_articles');
+    }
+    $user = $session->get('user');
+    if (!$user instanceof Auteur || $article->getAuteur()->getId() !== $user->getId()) {
+        // add a message to the session
+        return $this->redirectToRoute('my_articles', ['error' => 'You are not allowed to delete this article']);
+    }
+else{
+    // Remove the article from the database
+    $entityManager = $this->doctrine->getManager();
+    $entityManager->remove($article);
+    $entityManager->flush();
+    return $this->redirectToRoute('my_articles');
+}
+}
+
+#[Route('/update-article/{id}', name: 'update_article', methods: ['GET', 'POST'])]
+public function updatePost($id , Request $request,SessionInterface $session): Response
+{
+
+    //
+    $user = $session->get('user');
+    if (!$user instanceof Auteur) {
+        return $this->redirectToRoute('my_articles');
+    }
+    $article = $this->doctrine->getRepository(Article::class)->find($id);
+
+    if (!$article) {
+        return $this->redirectToRoute('articles');
+    }
+
+    $form = $this->createForm(UpdateArticleFormType::class, $article, ['validation_groups' => ['create']]);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->flush();
+        return $this->redirectToRoute('my_articles');
+    }
+    return $this->render('Articles/updateArticle.html.twig', [
+        'form' => $form->createView(),
+        'article' => $article,
+        'user' => $user,
+    ]);
+}
+//show article
+
+#[Route('/show-article/{id}', name: 'show_article', methods: ['GET', 'POST'])]
+public function showArticle($id, SessionInterface $session): Response
+{
+    $user = $session->get('user');
+    if (!$user instanceof Auteur) {
+        return $this->redirectToRoute('app_login');
+    }
+    $article = $this->doctrine->getRepository(Article::class)->find($id);
+    if (!$article) {
+        return $this->redirectToRoute('articles');
+    }
+    return $this->render('Articles/showArticle.html.twig', [
+        'article' => $article,
+        'user' => $user,
+    ]);
+
+
+}
+
 }

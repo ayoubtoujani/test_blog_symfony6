@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Bloggy | Article Details
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .article-details-container {
+        background-color: #99caf0;
+        border-radius: 15px;
+        padding: 20px;
+        width: 60%;
+        margin: 50px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-header {
+        background-color: #001842;
+        color: white;
+        padding: 10px;
+        border-radius: 15px 15px 0 0;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .article-info {
+        margin-top: 20px;
+    }
+
+    .info-title {
+        font-weight: bold;
+        color: #001842;
+        margin-bottom: 10px;
+    }
+
+    .info-content {
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-item {
+        margin-bottom: 10px;
+    }
+
+    .info-item label {
+        display: inline-block;
+        width: 100px;
+        font-weight: bold;
+    }
+
+    .info-item .value {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="article-details-container">
+    <div class="article-header">
+        Article Informations
+    </div>
+    <div class="article-info">
+        <div class="info-item">
+            <label>Title</label>
+            <span class="value">{{ article.getTitre() }}</span>
+        </div>
+        <div class="info-item">
+            <label>Content</label>
+            <span class="value">{{ article.getContenu() }}</span>
+        </div>
+        <div class="info-item">
+            <label>Creation Date</label>
+            <span class="value">{{ article.getDateCreation()|date('Y-m-d H:i:s') }}</span>
+        </div>
+        <div class="info-item">
+            <label>Creator</label>
+            <span class="value">{{ article.getAuteur().getFirstname() }} {{ article.getAuteur().getLastname() }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

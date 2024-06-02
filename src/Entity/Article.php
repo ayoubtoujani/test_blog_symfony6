@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Console\Color;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -17,10 +16,12 @@ class Article
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank(message: 'Title should not be empty!',groups: ['create'])]
     private ?string $Titre = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Assert\NotBlank(message: 'Content of the article should not be empty!',groups: ['create'])]
     private ?string $Contenu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -40,7 +41,7 @@ class Article
         return $this->Titre;
     }
 
-    public function setTitre(string $Titre): static
+    public function setTitre(string $Titre=null): static
     {
         $this->Titre = $Titre;
 
@@ -52,7 +53,7 @@ class Article
         return $this->Contenu;
     }
 
-    public function setContenu(string $Contenu): static
+    public function setContenu(string $Contenu=null): static
     {
         $this->Contenu = $Contenu;
 
