@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Form\ArticleFormType;
+
 
 class MainController extends AbstractController
 {
@@ -90,5 +92,35 @@ class MainController extends AbstractController
             ]);
         }
        
+    }
+    #[Route('/articles/create', name: 'create_article', methods: ['GET', 'POST'])]
+    public function createArticle(Request $request, SessionInterface $session): Response
+    {
+        $user = $session->get('user');
+        if (!$user instanceof Auteur) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $article = new Article();
+        $form = $this->createForm(ArticleFormType::class, $article);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article->setDateCreation(new \DateTime());
+            $findUser = $this->doctrine->getRepository(Auteur::class)->findOneBy(['id' => $user->getId()]);
+            $article->setAuteur($findUser);
+
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('articles');
+        }
+
+        return $this->render('Articles/createArticle.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user
+        ]);
     }
 }

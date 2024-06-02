@@ -113,7 +113,29 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+   #create-article-button {
+            padding: 0.6rem 2rem;
+            margin-top: 1rem;
+            text-align: center;
+            cursor: pointer;
+            background-color: #001842;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        #create-article-button:hover {
+            background-color: #001842d9;
+        }
     </style>
+{% endblock %}
+
+{% block create %}
+ <a href="{{ path('create_article') }}"<label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center;">
+                    <i class="fa-solid fa-circle-plus"></i> 
+                    Créer</label> 
+                    </a>
+  
 {% endblock %}
 
 {% block content %}
