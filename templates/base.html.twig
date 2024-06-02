@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="/css/styleFeed.css">
 <style>
-    @import url("http://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+  @import url("http://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 :root {
     --color-white:white;
     --color-light:rgb(252, 30%, 95%);
@@ -273,16 +273,11 @@ main .container .left .profile {
             background: #5112e3;
             transition: background 0s;
         }
-
-  </style>
-
-
-    <title>{% block title %}Bloggy{% endblock %}</title>
+</style>
+     <title>{% block title %}Bloggy{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
-
 </head>
 <body>
-   <body>
     <nav>
         <div class="container">
             <h2 class="log">Bloggy</h2>
@@ -292,71 +287,64 @@ main .container .left .profile {
                 <input type="search" placeholder="Rechercher des Articles.">
             </div>
             {% endblock %}
-            
             <div class="create">
-                
                 <div class="profile-photo">
-                      <img src="{{ asset('images/profile.png' ) }}" style="width: 50px; height: 50px; " alt="">
+                    <img src="{{ asset('images/profile.png') }}" style="width: 50px; height: 50px;" alt="">
                 </div>
-            <a href="{{ path('app_login') }}" class="btn btn-primary">Log Out</a>
-  
- 
-
-        </div>
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Log Out</a>
+            </div>
         </div>
     </nav>
 
     <!...............................MAIN...........................>
-    <main> 
+    <main>
         <div class="container">
-    <!..............................LEFT.............................>
+            <!..............................LEFT.............................>
             <div class="left">
                 <a class="profile">
                     <div class="profile-photo">
-                      <img src="{{ asset('images/profile.png' ) }}" style="width: 30px; height: 30px;" alt="">
-
+                        <img src="{{ asset('images/profile.png') }}" style="width: 30px; height: 30px;" alt="">
                     </div>
-                   {% if user is not null %}
-    <div class="handle" id="nameLoggedinuser">
-        <h4>{{ user.getFirstname() }} {{ user.getLastname() }}</h4>
-        <p class="text-muted">@{{ user.getFirstname() }}</p>
-    </div>
-{% endif %}
+                    {% if user is not null %}
+                    <div class="handle" id="nameLoggedinuser">
+                        <h4>{{ user.getFirstname() }} {{ user.getLastname() }}</h4>
+                        <p class="text-muted">@{{ user.getFirstname() }}</p>
+                    </div>
+                    {% endif %}
                 </a>
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">
-                <a class="menu-item " id="home" href='{{ path("articles") }}'>
+                    <a class="menu-item" id="home" href="{{ path('articles') }}">
                         <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
                     </a>
-                    <a class="menu-item " id="profile" href='{{ path("my_articles") }}'>
-                    <span><i class="fa-solid fa-user"></i></span><h3>My Articles</h3>
+                    <a class="menu-item" id="profile" href="{{ path('my_articles') }}">
+                        <span><i class="fa-solid fa-user"></i></span><h3>My Articles</h3>
                     </a>
                 </div>
                 <!.................END OF SIDEBAR............>
-             {% block create  %}  
-              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center;">
-                    <i class="fa-solid fa-circle-plus"></i> 
-                    Créer</label> 
-            {% endblock %}
+                {% block create %}
+                <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center;">
+                    <i class="fa-solid fa-circle-plus"></i> Créer
+                </label>
+                {% endblock %}
             </div>
-    <!............................MIDDLE...............................>
-        <div class="content" style="width: 130%; height: auto;">
-            {% block content %}
-           
-            {% endblock %}
-        </div> 
-                   
- </div>
-</main>
- <script>
-     document.addEventListener("DOMContentLoaded", function() {
+            <!............................MIDDLE...............................>
+            <div class="content" style="width: 130%; height: auto;">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             const menuItems = document.querySelectorAll('.menu-item');
+
             function activateMenuItem(item) {
                 menuItems.forEach(otherItem => {
                     otherItem.classList.remove('active');
                 });
                 item.classList.add('active');
-                // Enregistrer l'ID de l'élément actif dans le stockage local
                 localStorage.setItem('activeMenuItemId', item.id);
             }
 
@@ -366,14 +354,13 @@ main .container .left .profile {
                 });
             });
 
-            // Vérifier s'il y a un élément de menu actif enregistré dans le stockage local
             const activeMenuItemId = localStorage.getItem('activeMenuItemId');
             if (activeMenuItemId) {
                 const activeMenuItem = document.getElementById(activeMenuItemId);
                 if (activeMenuItem) {
                     activateMenuItem(activeMenuItem);
                 }
-            }    
+            }
         });
     </script>
 </body>

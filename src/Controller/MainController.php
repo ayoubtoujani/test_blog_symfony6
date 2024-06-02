@@ -27,6 +27,7 @@ class MainController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
+/** **************************************** login & Register  **************************************** */
     #[Route('/login', name: 'app_login', methods:['POST', 'GET'])]
     public function login(Request $request, SessionInterface $session): Response
     {
@@ -80,7 +81,8 @@ class MainController extends AbstractController
             'success' => $success,
         ]);
     }
-    //find all articles
+  /** **************************************** ListOfAllArticles  **************************************** */
+
     #[Route('/articles', name: 'articles', methods: ['GET', 'POST'])]
     public function articles(SessionInterface $session): Response
     {
@@ -88,13 +90,15 @@ class MainController extends AbstractController
         if ($user instanceof Auteur){
 
             $articles = $this->doctrine->getRepository(Article::class)->findAll();
-            return $this->render('Articles/listArticle.html.twig', [
+            return $this->render('Articles/listOfArticles.html.twig', [
                 'articles' => $articles,
                 'user' => $user
             ]);
         }
        
     }
+
+    /** **************************************** CreateArticle  **************************************** */
     #[Route('/articles/create', name: 'create_article', methods: ['GET', 'POST'])]
     public function createArticle(Request $request, SessionInterface $session): Response
     {
@@ -126,15 +130,14 @@ class MainController extends AbstractController
         ]);
     }
 
-    //geta ll articles by user
+    /** **************************************** MyArticles  **************************************** */
 
     #[Route('/my', name: 'my_articles', methods: ['GET', 'POST'])]
     public function myarticles(SessionInterface $session): Response
     {
+        // Get the user from the session
         $user = $session->get('user');
-        // Check if a user is logged in
         if ($user instanceof Auteur) {
-            // Fetch publications by their owner
             $articles = $this->doctrine->getRepository(Article::class)->findBy(['Auteur' => $user->getId()]);
             return $this->render('Articles/myArticles.html.twig', [
                 'articles' => $articles,
@@ -143,8 +146,9 @@ class MainController extends AbstractController
         }
 }
 
+/** **************************************** DeleteArticle  **************************************** */
 #[Route('/delete-article/{id}', name: 'delete_article', methods: ['GET', 'POST'])]
-public function deletePublication($id,SessionInterface $session): RedirectResponse
+public function deleteArticle($id,SessionInterface $session): RedirectResponse
 {
     $article = $this->doctrine->getRepository(Article::class)->find($id);
     if (!$article) {
@@ -152,7 +156,6 @@ public function deletePublication($id,SessionInterface $session): RedirectRespon
     }
     $user = $session->get('user');
     if (!$user instanceof Auteur || $article->getAuteur()->getId() !== $user->getId()) {
-        // add a message to the session
         return $this->redirectToRoute('my_articles', ['error' => 'You are not allowed to delete this article']);
     }
 else{
@@ -164,8 +167,9 @@ else{
 }
 }
 
+/** **************************************** UpdateArticle  **************************************** */
 #[Route('/update-article/{id}', name: 'update_article', methods: ['GET', 'POST'])]
-public function updatePost($id , Request $request,SessionInterface $session): Response
+public function updateArticle($id , Request $request,SessionInterface $session): Response
 {
 
     //
@@ -194,8 +198,8 @@ public function updatePost($id , Request $request,SessionInterface $session): Re
         'user' => $user,
     ]);
 }
-//show article
 
+/** **************************************** ShowArticle  **************************************** */
 #[Route('/show-article/{id}', name: 'show_article', methods: ['GET', 'POST'])]
 public function showArticle($id, SessionInterface $session): Response
 {
