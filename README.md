@@ -20,7 +20,7 @@ Symfony CLI
 MySQL or another database server
 
 Step 1: Clone the Repository
-git clone <your-repo-url>
+git clone <repo-name>
 cd <your-repo-directory>
 
 Step 2: install or update your composer 
